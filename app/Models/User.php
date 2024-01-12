@@ -18,6 +18,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
+        'photo',
         'name',
         'email',
         'password',
@@ -41,5 +42,18 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime'
     ];
+
+    public function scopeSearch($query, $value): void
+    {
+        $query->where('name', 'like', "%{$value}%")
+            ->orWhere('email', 'like', "%{$value}%");
+    }
+
+    public function getRouteKeyName(): string
+    {
+        return 'name';
+    }
 }
